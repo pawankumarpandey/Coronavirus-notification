@@ -10,6 +10,7 @@ import urllib.parse
 import urllib.error
 from bs4 import BeautifulSoup as bs
 
+#created a string of all states combining with all new line character
 a = "Jammu and Kashmir\nPunjab\nHimachal Pradesh\nHaryana\nDelhi\nRajasthan\nUttar Pradesh\nUttarakhand\nMadhya Pradesh\nChattisgarh\nGujarat\nMaharashtra\nKarnataka\nGoa\nKerala\nTamil nadu\nAndhra pradesh\nTelangana\nOrissa\nBihar\nJharkhand\nWest Bengal\nAssam\nArunach Pradesh\nSikkim\nMeghalaya\nMizoram\nNagaland\nTripura"
 
 states = a.split("\n")
@@ -38,9 +39,11 @@ def speak(text):
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
     for j, v in enumerate(voices):
+        #aim is to get indian accent , so searching for it until got it
         if voices[j].id == 'hindi':
             break
-
+    
+    #performing a check whether it is required/desired voice 
     print(voices[j].id)
     engine.setProperty('voice', voices[j].id)
     engine.setProperty('rate', 100)
@@ -54,7 +57,7 @@ def get_audio():
     with sr.Microphone() as source:
         r.adjust_for_ambient_noise(source)
         print("Say something!")
-        audio = r.listen(source, timeout=3)
+        audio = r.listen(source, timeout=5)
         said = ""
 
         try:
@@ -74,10 +77,11 @@ def main():
 
     while True:
         getAudio = []
-        print("Listening...")
+        print("Listening, please speak .....")
         text = get_audio()
         getAudio.append(text)
         print(text)
+        #if user wants to know total number of cases of India 
         if (getAudio[0] == 'total cases'):
             total_confirmed_in_india = itemList[34].split("\n")
             total_confirmed_cases_in_india_text = total_confirmed_in_india[0]
@@ -85,7 +89,7 @@ def main():
             total_number_of_cured_in_india = itemList[35]
             total_number_of_deaths_in_india = itemList[36]
 
-            nTex = f'I ,am ,announcing ,about  , {total_confirmed_cases_in_india_text}  , in, which, total,' \
+            nTex = f'I ,am ,announcing regarding coronavirus cases ,about  , {total_confirmed_cases_in_india_text}  , in, which, total,' \
                     f'confirmed, cases, are, {total_number_of_cases_in_india[:-1]} , cured,and, discharge' \
                     f'd, are ,{total_number_of_cured_in_india},  ' \
                     f'and, total ,deaths, till, now, are , {total_number_of_deaths_in_india} ,'
@@ -95,7 +99,7 @@ def main():
             dataList = item.split("\n")
             if dataList[1].lower() in getAudio:
 
-                nText = f'I ,am ,announcing ,about ,State , {dataList[1]}  in, which, total,confirmed,cases, are, {dataList[2]} , cured,and, discharged, are ,{dataList[3]},  ' \
+                nText = f'I ,am ,announcing regarding coronavirus cases ,about ,State , {dataList[1]}  in, which, total,confirmed,cases, are, {dataList[2]} , cured,and, discharged, are ,{dataList[3]},  ' \
                         f'and, total ,deaths, till, now, are , {dataList[4]} ,'
 
                 speak(str(nText))
